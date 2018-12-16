@@ -39,4 +39,5 @@ const IssueForm = React.memo(() => {
 export default reduxForm({
   form: 'issueForm',
   forceUnregisterOnUnmount: true,
+  enableReinitialize: true,
 })(IssueForm);

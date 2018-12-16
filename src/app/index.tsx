@@ -8,18 +8,19 @@ import Issue from './containers/Issue';
 
 import * as style from './style.css';
 
-export const App = hot(() => (
-  <Router>
-    <Route
-      render={({ location }) => (
-        <main className={style.content}>
-          <Home />
-          <Switch location={location}>
-            <Route path="/issue/:issueId" component={Issue} />
-            <Route path="/new" render={(props) => <Issue {...props} isNew={true} />} />
-          </Switch>
-        </main>
-      )}
-    />
-  </Router>
-));
+export const App = hot(() => {
+  const mainRoute = ({ location }) => (
+    <main className={style.content}>
+      <Home />
+      <Switch location={location}>
+        <Route path="/issue/:issueId" component={Issue} />
+        <Route path="/new" render={(props) => <Issue {...props} isNew={true} />} />
+      </Switch>
+    </main>
+  );
+  return (
+    <Router>
+      <Route render={mainRoute} />
+    </Router>
+  );
+});

@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { Issue } from 'app/store';
 
 import IssueList from '../../components/IssueList';
+import * as style from './style.css';
 
 const issues = [
   { issueId: 'issueId1', name: 'issue name1', type: 'bug', description: 'desc1' },
@@ -16,6 +17,9 @@ export default withRouter(
     const onItemClick = (item: Issue) => history.push(`/issue/${item.issueId}`);
     return (
       <div>
+        <div className={style.toolBar}>
+          <button onClick={() => history.push('/new')}>Add New</button>
+        </div>
         <IssueList items={issues} onItemClick={onItemClick} />
       </div>
     );

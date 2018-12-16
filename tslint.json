@@ -112,7 +112,6 @@
       "check-type"
     ],
     "jsx-no-lambda": false,
-    "jsx-no-multiline-js": false,
     "no-implicit-dependencies": [true, "dev", ["app"]],
     "no-submodule-imports": false
   }
