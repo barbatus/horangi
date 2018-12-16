@@ -1,16 +1,20 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:100,400,500');
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500');
 
 @import 'normalize.css';
 
 :root {
-  --default-background: #f5f5f5;
+  --default-background: #fdfdfd;
+  --text-color: #4a4a4a;
+  --border-color: #c7c7c7;
+  --primary-color: #f69546;
+  --border-radius: 3px;
 }
 
 body {
-  font: 14px Roboto, sans-serif;
-  line-height: 1.4em;
+  font: 16px Roboto, sans-serif;
+  line-height: 1.5em;
   background: var(--default-background);
-  color: black;
+  color: var(--text-color);
   font-weight: 100;
 }
 
@@ -18,17 +22,32 @@ body {
   box-sizing: border-box;
 }
 
-input, button {
-  font-weight: 100;
+input, button, textarea, select {
+  font-weight: 300;
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  outline-color: var(--primary-color);
+  outline-width: 2px;
+  border-radius: var(--border-radius);
 }
 
 button {
   background-color: transparent;
   border: 0;
-  color: whitesmoke;
   outline: none;
+  border: 1px solid var(--border-color);
+  min-width: 100px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 400;
 }
 
 button[disabled] {
   opacity: 0.5;
+}
+
+:global(button.primary) {
+  background-color: var(--primary-color);
+  color: whitesmoke;
+  border: 0;
 }

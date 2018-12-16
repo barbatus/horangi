@@ -1,8 +1,18 @@
 .sidePanel {
+  padding: 40px;
   position: fixed;
   right: 0;
   top: 0;
   height: 100%;
   width: 400px;
   box-shadow: -3px 3px 4px 0 #c4cace;
+
+  & form {
+    margin-bottom: 20px;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
 }

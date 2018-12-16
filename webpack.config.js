@@ -20,7 +20,14 @@ var postcssLoader = {
     plugins: [
       require('postcss-import')({ addDependencyTo: webpack, path: ['src'] }),
       require('postcss-url')(),
-      require('postcss-preset-env')({ browsers: 'last 2 versions' }),
+      require('postcss-extend')(),
+      require('postcss-preset-env')({
+        stage: 2,
+        features: {
+          'nesting-rules': true
+        },
+        browsers: 'last 2 versions',
+      }),
       require('postcss-reporter')(),
       require('postcss-browser-reporter')({
         disabled: isProduction
@@ -113,7 +120,7 @@ var config = {
                   query: {
                     modules: true,
                     sourceMap: !isProduction,
-                    importLoaders: 2,
+                    importLoaders: 1,
                     localIdentName: '[local]__[hash:base64:5]'
                   },
                 },
