@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400,500');
+
+@import 'normalize.css';
+
+:root {
+  --default-background: #f5f5f5;
+}
+
+body {
+  font: 14px Roboto, sans-serif;
+  line-height: 1.4em;
+  background: var(--default-background);
+  color: black;
+  font-weight: 100;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input, button {
+  font-weight: 100;
+}
+
+button {
+  background-color: transparent;
+  border: 0;
+  color: whitesmoke;
+  outline: none;
+}
+
+button[disabled] {
+  opacity: 0.5;
+}
