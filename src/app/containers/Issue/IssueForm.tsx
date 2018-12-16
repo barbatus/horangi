@@ -1,18 +1,12 @@
 import * as React from 'react';
 import { Field, reduxForm } from 'redux-form';
 
-import { IssueType } from 'app/store';
+import { ISSUE_TYPE_OPTIONS } from 'app/store';
 
 import * as style from './form.scss';
 
-const TYPE_OPTIONS = [
-  { value: IssueType.Bug, name: 'Bug' },
-  { value: IssueType.Feat, name: 'Feature' },
-  { value: IssueType.Story, name: 'Story' },
-];
-
 const IssueForm = React.memo(() => {
-  const options = TYPE_OPTIONS.map((option) => (
+  const options = ISSUE_TYPE_OPTIONS.map((option) => (
     <option key={option.value} value={option.value}>{option.name}</option>
   ));
   return (

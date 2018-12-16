@@ -1,0 +1,36 @@
+.chart {
+  --width: 150px;
+
+  display: flex;
+  justify-content: center;
+  padding-top: 60px;
+
+  & svg {
+    width: var(--width);
+    margin-right: 60px;
+  }
+}
+
+.legend {
+  width: var(--width);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  & > div {
+    padding: 5px 0;
+    font-weight: 300;
+    font-size: larger;
+
+    & div {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    & div:first-child {
+      padding: 10px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+  }
+}

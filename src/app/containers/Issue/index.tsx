@@ -1,9 +1,10 @@
+import * as H from 'history';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { History, withRouter } from 'react-router-dom';
+import { match, withRouter } from 'react-router-dom';
 import { submit } from 'redux-form';
 
-import { Issue } from 'app/store';
+import { Issue, ISSUES } from 'app/store';
 
 import IssueForm from './IssueForm';
 import * as style from './style.scss';
@@ -36,22 +37,23 @@ const Editor = React.memo<IEditorProps>(({ label, issue, onOk, onSubmit, onCance
 interface IssueHOProps {
   isNew?: boolean;
   dispatch: (action: string) => void;
-  history: History<any>;
+  history: H.History;
+  match: match<{ issueId: string }>;
 }
 
-const ISSUE = {name: 'some name', type: 'bug', description: 'issue desciption' };
-
-const IssueHO = React.memo<IssueHOProps>(({ isNew, dispatch, history }) => {
+const IssueHO = React.memo<IssueHOProps>(({ isNew, dispatch, match: router, history }) => {
   const onSubmit = (fields) => {
     console.log(fields);
   };
   const onOk = () => {
     dispatch(submit('issueForm'));
   };
+  const issue = isNew ? {} : ISSUES.find((item) =>
+    item.issueId === router.params.issueId);
   return (
     <Editor
       label={isNew ? 'Create' : 'Update'}
-      issue={isNew ? {} : ISSUE}
+      issue={issue}
       dispatch={dispatch}
       onOk={onOk}
       onSubmit={onSubmit}
@@ -60,4 +62,4 @@ const IssueHO = React.memo<IssueHOProps>(({ isNew, dispatch, history }) => {
   );
 });
 
-export default connect()(withRouter(IssueHO));
+export default connect()(withRouter(IssueHO as any));
