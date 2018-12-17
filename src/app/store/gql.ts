@@ -29,20 +29,31 @@ export const typeDefs = `
     ): Issue
   }
 
-  type Sort {
+  type OrderBy {
     field: String!
-    asc: Boolean!
+    dir: Integer!
   }
 
   type Query {
-    sort: Sort
     issues: [Issue]
+    issues(orderBy: OrderBy!): [Issue]
     issue(id: String!): Issue
   }
 `;
 
 export const GET_ISSUES = gql`{
     issues @client {
+      id
+      name
+      type
+      description
+    }
+  }
+`;
+
+export const GET_ISSUES_ORDER_BY = gql`
+  query GetIssues($orderBy: OrderBy!) {
+    issues(orderBy: $orderBy) @client {
       id
       name
       type

@@ -1,3 +1,5 @@
+import gql from 'graphql-tag';
+
 import { GET_ISSUES } from './gql';
 
 export const ISSUES = [
@@ -11,10 +13,19 @@ export const ISSUES = [
 
 export const defaults = {
   issues: ISSUES,
-  sort: { field: 'name', asc: true, __typename: 'Sort' },
 };
 
 let nextIssueId = 0;
+
+const all = gql` {
+    issues @client {
+      id
+      name
+      type
+      description
+    }
+  }
+`;
 
 export const resolvers = {
   Mutation: {
@@ -38,6 +49,16 @@ export const resolvers = {
     issue: (_, { id }, { cache }) => {
       const { issues } = cache.readQuery({ query: GET_ISSUES });
       return issues.find((issue) => issue.id === id);
+    },
+    issues: (_, { orderBy }, { cache }) => {
+      const { issues } = cache.readQuery({ query: all });
+      const onSort = (issue1, issue2) => {
+        if (issue1[orderBy.field]) {
+          return orderBy.dir * issue1[orderBy.field].localeCompare(issue2[orderBy.field]);
+        }
+        return -1;
+      };
+      return issues.sort(onSort);
     },
   },
 };

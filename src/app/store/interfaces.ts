@@ -1,6 +1,6 @@
-export interface ISort {
+export interface IOrderBy {
   field: string;
-  order: number;
+  dir: number;
 }
 
 export interface Issue {
