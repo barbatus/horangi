@@ -1,17 +1,20 @@
 import * as React from 'react';
+import { Query } from 'react-apollo';
 
-import { ISSUE_TYPE_OPTIONS, ISSUES } from 'app/store';
+import { GET_ISSUES, Issue, ISSUE_TYPE_OPTIONS } from 'app/store';
 
 import PieChart from '../../components/PieChart';
 
-export default React.memo(() => {
-  const groups = ISSUES.reduce((accum, issue) => {
+class IssuesQuery extends Query<{ issues: Issue[] }, {}> {}
+
+const IssueChart = React.memo<{ issues: Issue[] }>(({ issues }) => {
+  const groups = issues.reduce((accum, issue) => {
     const count = accum[issue.type] || 0;
     accum[issue.type] = count + 1;
     return accum;
   }, {});
 
-  const len = ISSUES.length;
+  const len = issues.length;
   const slices = Object.keys(groups).map((type) => {
       const count = groups[type];
       const typeOption = ISSUE_TYPE_OPTIONS.find((option) => option.value === type);
@@ -23,3 +26,9 @@ export default React.memo(() => {
     </div>
   );
 });
+
+export default () => (
+  <IssuesQuery query={GET_ISSUES}>
+    {({ data: { issues } }) => <IssueChart issues={issues} />}
+  </IssuesQuery>
+);

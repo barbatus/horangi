@@ -1,8 +1,8 @@
 export enum IssueType {
-  Bug = 'bug',
-  Feat = 'feat',
-  Story = 'story',
-  Epic = 'epic',
+  Bug = 'BUG',
+  Feat = 'FEAT',
+  Story = 'STORY',
+  Epic = 'EPIC',
 }
 
 export const ISSUE_TYPE_OPTIONS = [

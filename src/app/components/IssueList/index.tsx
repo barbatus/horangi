@@ -24,7 +24,7 @@ function renderSort(sort: ISort, field: string, onClick?: () => void) {
 export default React.memo<IssueListProps>(({ className, items, onItemClick }) => {
   const children = items.map((item) => {
     return (
-      <IssueItem key={item.issueId} item={item} onClick={onItemClick} />
+      <IssueItem key={item.id} item={item} onClick={onItemClick} />
     );
   });
   const sort = { field: 'name', order: 1 };

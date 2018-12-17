@@ -4,7 +4,7 @@ export interface ISort {
 }
 
 export interface Issue {
-  issueId: string;
+  id: string;
   name: string;
   type: string;
   description: string;

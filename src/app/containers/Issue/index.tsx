@@ -1,10 +1,11 @@
 import * as H from 'history';
 import * as React from 'react';
+import { Query } from 'react-apollo';
 import { connect } from 'react-redux';
 import { match, withRouter } from 'react-router-dom';
 import { submit } from 'redux-form';
 
-import { Issue, ISSUES } from 'app/store';
+import { GET_ISSUE, Issue } from 'app/store';
 
 import IssueForm from './IssueForm';
 import * as style from './style.scss';
@@ -12,7 +13,6 @@ import * as style from './style.scss';
 interface IEditorProps {
   issue: Partial<Issue>;
   label: string;
-  dispatch: (action: string) => void;
   onSubmit: (item: Partial<Issue>) => void;
   onOk: () => void;
   onCancel: () => void;
@@ -41,6 +41,26 @@ interface IssueHOProps {
   match: match<{ issueId: string }>;
 }
 
+class IssueQuery extends Query<{ issue: Issue }, { id: string }> {}
+
+const renderEditor = (
+  label: string,
+  issue: Partial<Issue>,
+  onOk: () => void,
+  onCancel: () => void,
+  onSubmit: (fields: Partial<Issue>) => void,
+) => {
+  return (
+    <Editor
+      label={label}
+      issue={issue}
+      onOk={onOk}
+      onSubmit={onSubmit}
+      onCancel={onCancel}
+    />
+  );
+};
+
 const IssueHO = React.memo<IssueHOProps>(({ isNew, dispatch, match: router, history }) => {
   const onSubmit = (fields) => {
     console.log(fields);
@@ -48,17 +68,14 @@ const IssueHO = React.memo<IssueHOProps>(({ isNew, dispatch, match: router, hist
   const onOk = () => {
     dispatch(submit('issueForm'));
   };
-  const issue = isNew ? {} : ISSUES.find((item) =>
-    item.issueId === router.params.issueId);
-  return (
-    <Editor
-      label={isNew ? 'Create' : 'Update'}
-      issue={issue}
-      dispatch={dispatch}
-      onOk={onOk}
-      onSubmit={onSubmit}
-      onCancel={() => history.push('/')}
-    />
+  const onCancel = () => {
+    history.push('/');
+  };
+  return isNew ?
+    renderEditor('Create', {}, onOk, onCancel, onSubmit) : (
+    <IssueQuery query={GET_ISSUE} variables={{ id: router.params.issueId }}>
+      {({ data: { issue } }) => renderEditor('Update', issue, onOk, onCancel, onSubmit)}
+    </IssueQuery>
   );
 });
 
