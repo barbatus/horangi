@@ -4,7 +4,7 @@ import { GET_ISSUES, GET_ISSUES_ORDER_BY } from './gql';
 
 const ISSUES = [...Array(20).keys()].map(() => {
   return {
-    id: faker.random.uuid(),
+    id: `${faker.random.number()}`,
     name: faker.lorem.words(2),
     type: faker.random.arrayElement(['BUG', 'FEAT', 'STORY', 'EPIC']),
     description: faker.lorem.sentence(),
@@ -18,11 +18,19 @@ export const defaults = {
 
 let lastOrderBy = null;
 export const resolvers = {
+  updateCache(cache, data) {
+    cache.writeData({ data });
+    cache.writeQuery({
+      query: GET_ISSUES_ORDER_BY,
+      data,
+      variables: { orderBy: lastOrderBy } ,
+    });
+  },
   Mutation: {
-    addIssue: (_, { name, type, description = null }, { cache }) => {
+    add: (_, { name, type, description = null }, { cache }) => {
       const { issues } = cache.readQuery({ query: GET_ISSUES });
       const newIssue = {
-        id: faker.random.uuid(),
+        id: `${faker.random.number()}`,
         name,
         type,
         description,
@@ -31,17 +39,21 @@ export const resolvers = {
       const data = {
         issues: [newIssue].concat(issues),
       };
-      cache.writeData({ data });
-      cache.writeQuery({
-        query: GET_ISSUES_ORDER_BY,
-        data,
-        variables: { orderBy: lastOrderBy } ,
-      });
+      resolvers.updateCache(cache, data);
       return newIssue;
     },
-    updateIssue: (_, { id, name, type, description }, { cache }) => {
+    update: (_, { id, name, type, description }, { cache }) => {
       const data = { name, type, description };
       cache.writeData({ id, data });
+      return null;
+    },
+    delete: (_, { id }, { cache }) => {
+      const query = cache.readQuery({ query: GET_ISSUES });
+      const issues = query.issues.filter((issue) => issue.id !== id);
+      const data = {
+        issues,
+      };
+      resolvers.updateCache(cache, data);
       return null;
     },
   },

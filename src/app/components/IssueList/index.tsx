@@ -11,12 +11,14 @@ import * as style from './style.scss';
 interface IssueListProps {
   className?: string;
   items: Issue[];
+  selected: Issue;
   orderBy: IOrderBy;
   onSort: (order: IOrderBy) => void;
   onItemClick: (item: Issue) => void;
+  onItemDelete: (item: Issue) => void;
 }
 
-function renderSort(orderBy: IOrderBy, field: string, onClick?: () => void) {
+function renderSort(orderBy: IOrderBy, field: string) {
   if (!orderBy) { return null; }
 
   if (orderBy.field !== field) { return null; }
@@ -26,10 +28,17 @@ function renderSort(orderBy: IOrderBy, field: string, onClick?: () => void) {
 }
 
 export default React.memo<IssueListProps>(
-  ({ className, items, orderBy, onSort, onItemClick }) => {
+  ({ className, items, selected, orderBy, onSort, onItemClick, onItemDelete }) => {
     const children = items.map((item) => {
+      const isSelected = selected && selected.id === item.id;
       return (
-        <IssueItem key={item.id} item={item} onClick={onItemClick} />
+        <IssueItem
+          key={item.id}
+          isSelected={isSelected}
+          item={item}
+          onClick={onItemClick}
+          onDelete={onItemDelete}
+        />
       );
     });
     const onSortClick = (field) => {
@@ -53,6 +62,7 @@ export default React.memo<IssueListProps>(
           <h4 className={style.itemDesc}>
             Description
           </h4>
+          <h4 className={style.actionCol} />
         </header>
         {children}
       </div>

@@ -16,17 +16,18 @@ export const typeDefs = `
   }
 
   type Mutation {
-    addIssue(
+    add(
       name: String!,
       type: IssueType!,
       description: String
     ): Issue
-    updateIssue(
+    update(
       id: String!,
-      name: String,
-      type: IssueType,
+      name: String!,
+      type: IssueType!,
       description: String
     ): Issue
+    delete(id: String!)
   }
 
   type OrderBy {
@@ -69,6 +70,48 @@ export const GET_ISSUE = gql`
       name
       type
       description
+    }
+  }
+`;
+
+export const UPDATE_ISSUE = gql`
+  mutation UpdateIssue(
+    $id: String!,
+    $name: String!,
+    $type: IssueType!,
+    $description: String
+  ) {
+    update(
+      id: $id,
+      name: $name,
+      type: $type,
+      description: $description,
+    ) @client {
+      id
+    }
+  }
+`;
+
+export const ADD_ISSUE = gql`
+  mutation AddIssue(
+    $name: String!,
+    $type: IssueType!,
+    $description: String
+  ) {
+    add(
+      name: $name,
+      type: $type,
+      description: $description,
+    ) @client {
+      id
+    }
+  }
+`;
+
+export const DELETE_ISSUE = gql`
+  mutation DeleteIssue($id: String!) {
+    delete(id: $id) @client {
+      id
     }
   }
 `;

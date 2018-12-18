@@ -26,6 +26,10 @@
   &:hover {
     background: #e6e6e6;
   }
+
+  &.itemSelected {
+    background: #e6e6e6;
+  }
 }
 
 .itemName {
@@ -40,7 +44,16 @@
 
 .itemDesc {
   @extend %field-base;
-  flex-basis: 50%;
+  flex-basis: 40%;
+}
+
+.actionCol {
+  flex-basis: 10%;
+  text-align: center;
+
+  & svg {
+    margin-right: 20px;
+  }
 }
 
 .header {

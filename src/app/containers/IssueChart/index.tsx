@@ -4,6 +4,7 @@ import { Query } from 'react-apollo';
 import { GET_ISSUES, Issue, ISSUE_TYPE_OPTIONS } from 'app/store';
 
 import PieChart from '../../components/PieChart';
+import * as style from './style.scss';
 
 class IssuesQuery extends Query<{ issues: Issue[] }, {}> {}
 
@@ -20,11 +21,12 @@ const IssueChart = React.memo<{ issues: Issue[] }>(({ issues }) => {
       const typeOption = ISSUE_TYPE_OPTIONS.find((option) => option.value === type);
       return { percent: count / len, color: typeOption.color, text: typeOption.name };
     }).sort((slice1, slice2) => slice1.color.localeCompare(slice2.color));
-  return (
-    <div>
-      <PieChart slices={slices} />
-    </div>
-  );
+
+  if (slices.length) {
+    return <PieChart slices={slices} />;
+  }
+
+  return <div className={style.noIssues}>No Issues</div>;
 });
 
 export default () => (
