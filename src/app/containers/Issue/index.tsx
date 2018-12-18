@@ -1,11 +1,11 @@
 import * as H from 'history';
 import * as React from 'react';
-import { Query } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import { connect } from 'react-redux';
 import { match, withRouter } from 'react-router-dom';
 import { submit } from 'redux-form';
 
-import { GET_ISSUE, Issue } from 'app/store';
+import { ADD_ISSUE, GET_ISSUE, Issue, UPDATE_ISSUE } from 'app/store';
 
 import IssueForm from './IssueForm';
 import * as style from './style.scss';
@@ -21,7 +21,7 @@ interface IEditorProps {
 const Editor = React.memo<IEditorProps>(({ label, issue, onOk, onSubmit, onCancel }) => {
   return (
     <div className={style.sidePanel}>
-      <IssueForm initialValues={issue} onSubmit={onSubmit} />
+      <IssueForm initialValues={issue} onSubmitSuccess={onSubmit} />
       <div className={style.buttons}>
         <button className="primary" onClick={onOk}>
           {label}
@@ -44,16 +44,15 @@ interface IssueHOProps {
 class IssueQuery extends Query<{ issue: Issue }, { id: string }> {}
 
 const renderEditor = (
-  label: string,
-  issue: Partial<Issue>,
+  issue: Issue,
   onOk: () => void,
   onCancel: () => void,
   onSubmit: (fields: Partial<Issue>) => void,
 ) => {
   return (
     <Editor
-      label={label}
-      issue={issue}
+      label={issue ? 'Update' : 'Create'}
+      issue={issue || {}}
       onOk={onOk}
       onSubmit={onSubmit}
       onCancel={onCancel}
@@ -61,10 +60,26 @@ const renderEditor = (
   );
 };
 
-const IssueHO = React.memo<IssueHOProps>(({ isNew, dispatch, match: router, history }) => {
-  const onSubmit = (fields) => {
-    console.log(fields);
+const withMutation = (
+  issue: Issue,
+  onOk: () => void,
+  onCancel: () => void,
+) => {
+  const onSubmit = (mutation) => (fields) => {
+    mutation({ variables: fields }).then(() => onCancel());
   };
+  return issue ? (
+    <Mutation mutation={UPDATE_ISSUE}>
+      {(updateIssue) => renderEditor(issue, onOk, onCancel, onSubmit(updateIssue))}
+    </Mutation>
+  ) : (
+    <Mutation mutation={ADD_ISSUE}>
+      {(addIssue) => renderEditor(issue, onOk, onCancel, onSubmit(addIssue))}
+    </Mutation>
+  );
+};
+
+const IssueHO = React.memo<IssueHOProps>(({ isNew, dispatch, match: router, history }) => {
   const onOk = () => {
     dispatch(submit('issueForm'));
   };
@@ -72,9 +87,9 @@ const IssueHO = React.memo<IssueHOProps>(({ isNew, dispatch, match: router, hist
     history.push('/');
   };
   return isNew ?
-    renderEditor('Create', {}, onOk, onCancel, onSubmit) : (
+    withMutation(null, onOk, onCancel) : (
     <IssueQuery query={GET_ISSUE} variables={{ id: router.params.issueId }}>
-      {({ data: { issue } }) => renderEditor('Update', issue, onOk, onCancel, onSubmit)}
+      {({ data: { issue } }) => withMutation(issue, onOk, onCancel)}
     </IssueQuery>
   );
 });

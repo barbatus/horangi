@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-import { GET_ISSUES } from './gql';
+import { GET_ISSUES, GET_ISSUES_ORDER_BY } from './gql';
 
 export const ISSUES = [
   { id: 'issueId1', name: 'issue name1', type: 'BUG', description: 'desc1', __typename: 'Issue' },
@@ -15,34 +15,33 @@ export const defaults = {
   issues: ISSUES,
 };
 
-let nextIssueId = 0;
-
-const all = gql` {
-    issues @client {
-      id
-      name
-      type
-      description
-    }
-  }
-`;
-
+let lastOrderBy = null;
 export const resolvers = {
   Mutation: {
-    addIssue: (_, { name, type, description }, { cache }) => {
+    addIssue: (_, { name, type, description = null }, { cache }) => {
       const { issues } = cache.readQuery({ query: GET_ISSUES });
       const newIssue = {
-        id: `${nextIssueId++}`,
+        id: `${Math.random()}`,
         name,
         type,
         description,
         __typename: 'Issue',
       };
       const data = {
-        issues: issues.concat([newIssue]),
+        issues: [newIssue].concat(issues),
       };
       cache.writeData({ data });
+      cache.writeQuery({
+        query: GET_ISSUES_ORDER_BY,
+        data,
+        variables: { orderBy: lastOrderBy } ,
+      });
       return newIssue;
+    },
+    updateIssue: (_, { id, name, type, description }, { cache }) => {
+      const data = { name, type, description };
+      cache.writeData({ id, data });
+      return null;
     },
   },
   Query: {
@@ -51,7 +50,8 @@ export const resolvers = {
       return issues.find((issue) => issue.id === id);
     },
     issues: (_, { orderBy }, { cache }) => {
-      const { issues } = cache.readQuery({ query: all });
+      const { issues } = cache.readQuery({ query: GET_ISSUES });
+      lastOrderBy = orderBy;
       const onSort = (issue1, issue2) => {
         if (issue1[orderBy.field]) {
           return orderBy.dir * issue1[orderBy.field].localeCompare(issue2[orderBy.field]);

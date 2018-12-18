@@ -19,7 +19,7 @@ export class Home extends React.PureComponent<IHomeProps, { orderBy: IOrderBy }>
   constructor(props) {
     super(props);
     this.state = {
-      orderBy: { field: 'name', dir: -1 },
+      orderBy: { field: 'name', dir: 1 },
     };
     this.renderHome = this.renderHome.bind(this);
     this.onNew = this.onNew.bind(this);
@@ -62,7 +62,11 @@ export class Home extends React.PureComponent<IHomeProps, { orderBy: IOrderBy }>
   render() {
     const { orderBy } = this.state;
     return (
-      <IssuesQuery query={GET_ISSUES_ORDER_BY} variables={{ orderBy }}>
+      <IssuesQuery
+        query={GET_ISSUES_ORDER_BY}
+        fetchPolicy="network-only"
+        variables={{ orderBy }}
+      >
         {this.renderHome}
       </IssuesQuery>
     );

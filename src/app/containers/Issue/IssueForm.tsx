@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, SubmissionError } from 'redux-form';
 
-import { ISSUE_TYPE_OPTIONS } from 'app/store';
+import { Issue, ISSUE_TYPE_OPTIONS } from 'app/store';
 
 import * as style from './form.scss';
 
@@ -30,8 +30,25 @@ const IssueForm = React.memo(() => {
   );
 });
 
+function validate(issue: Partial<Issue>) {
+  if (!issue.name) {
+    throw new SubmissionError({
+      name: 'Required',
+    });
+  }
+
+  if (!issue.type) {
+    throw new SubmissionError({
+      type: 'Required',
+    });
+  }
+
+  return issue;
+}
+
 export default reduxForm({
   form: 'issueForm',
+  onSubmit: validate,
   forceUnregisterOnUnmount: true,
   enableReinitialize: true,
 })(IssueForm);
