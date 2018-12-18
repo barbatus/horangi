@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { combineReducers, createStore } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
-import { apolloClient } from './app/store';
+import { setupApollo } from './app/store';
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -13,11 +13,13 @@ const rootReducer = combineReducers({
 
 import { App } from 'app';
 
-ReactDOM.render(
-  <ApolloProvider client={apolloClient}>
-    <Provider store={createStore(rootReducer)}>
-      <App />
-    </Provider>
-  </ApolloProvider>,
-  document.getElementById('app'),
-);
+setupApollo().then((client) => {
+  ReactDOM.render(
+    <ApolloProvider client={client}>
+      <Provider store={createStore(rootReducer)}>
+        <App />
+      </Provider>
+    </ApolloProvider>,
+    document.getElementById('app'),
+  );
+});
