@@ -1,15 +1,16 @@
-import gql from 'graphql-tag';
+import * as faker from 'faker';
 
 import { GET_ISSUES, GET_ISSUES_ORDER_BY } from './gql';
 
-export const ISSUES = [
-  { id: 'issueId1', name: 'issue name1', type: 'BUG', description: 'desc1', __typename: 'Issue' },
-  { id: 'issueId2', name: 'issue name2', type: 'FEAT', description: 'desc2', __typename: 'Issue' },
-  { id: 'issueId3', name: 'issue name3', type: 'STORY', description: 'desc3', __typename: 'Issue' },
-  { id: 'issueId4', name: 'issue name4', type: 'EPIC', description: 'desc4', __typename: 'Issue' },
-  { id: 'issueId5', name: 'issue name5', type: 'EPIC', description: 'desc5', __typename: 'Issue' },
-  { id: 'issueId6', name: 'issue name6', type: 'FEAT', description: 'desc6', __typename: 'Issue' },
-];
+const ISSUES = [...Array(20).keys()].map(() => {
+  return {
+    id: faker.random.uuid(),
+    name: faker.lorem.words(2),
+    type: faker.random.arrayElement(['BUG', 'FEAT', 'STORY', 'EPIC']),
+    description: faker.lorem.sentence(),
+    __typename: 'Issue',
+  };
+});
 
 export const defaults = {
   issues: ISSUES,
@@ -21,7 +22,7 @@ export const resolvers = {
     addIssue: (_, { name, type, description = null }, { cache }) => {
       const { issues } = cache.readQuery({ query: GET_ISSUES });
       const newIssue = {
-        id: `${Math.random()}`,
+        id: faker.random.uuid(),
         name,
         type,
         description,
