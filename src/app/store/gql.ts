@@ -8,10 +8,16 @@ export const typeDefs = `
     EPIC
   }
 
+  enum Status {
+    OPEN
+    CLOSE
+  }
+
   type Issue {
     id: String!
     name: String!
     type: IssueType!
+    status: Status!
     description: String
   }
 
@@ -25,6 +31,7 @@ export const typeDefs = `
       id: String!,
       name: String!,
       type: IssueType!,
+      status: Status!,
       description: String
     ): Issue
     delete(id: String!)
@@ -47,6 +54,7 @@ export const GET_ISSUES = gql`{
       id
       name
       type
+      status
       description
     }
   }
@@ -58,6 +66,7 @@ export const GET_ISSUES_ORDER_BY = gql`
       id
       name
       type
+      status
       description
     }
   }
@@ -69,6 +78,7 @@ export const GET_ISSUE = gql`
       id
       name
       type
+      status
       description
     }
   }
@@ -78,12 +88,14 @@ export const UPDATE_ISSUE = gql`
   mutation UpdateIssue(
     $id: String!,
     $name: String!,
+    $status: Status!,
     $type: IssueType!,
     $description: String
   ) {
     update(
       id: $id,
       name: $name,
+      status: $status,
       type: $type,
       description: $description,
     ) @client {

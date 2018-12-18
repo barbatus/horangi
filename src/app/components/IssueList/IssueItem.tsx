@@ -31,6 +31,9 @@ export default React.memo<IssueItemProps>(({ item, isSelected, onClick, onDelete
       <div className={style.itemType}>
         {item.type}
       </div>
+      <div className={style.itemStatus}>
+        {item.status}
+      </div>
       <div className={style.itemDesc}>
         {item.description}
       </div>

@@ -5,7 +5,7 @@ import { Issue, ISSUE_TYPE_OPTIONS } from 'app/store';
 
 import * as style from './form.scss';
 
-const IssueForm = React.memo(() => {
+const IssueForm = React.memo<{ initialValues: Partial<Issue> }>(({ initialValues }) => {
   const options = ISSUE_TYPE_OPTIONS.map((option) => (
     <option key={option.value} value={option.value}>{option.name}</option>
   ));
@@ -22,6 +22,17 @@ const IssueForm = React.memo(() => {
           {options}
         </Field>
       </div>
+      {
+        initialValues.status ? (
+          <div>
+            <label htmlFor="status">Status</label>
+            <Field name="status" component="select" type="text">
+              <option key={'OPEN'} value={'OPEN'}>Open</option>
+              <option key={'CLOSE'} value={'CLOSE'}>Close</option>
+            </Field>
+          </div>
+        ) : null
+      }
       <div>
         <label htmlFor="description">Description</label>
         <Field name="description" rows={10} component="textarea" />

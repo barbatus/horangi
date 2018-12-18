@@ -39,7 +39,12 @@
 
 .itemType {
   @extend %field-base;
-  flex-basis: 20%;
+  flex-basis: 10%;
+}
+
+.itemStatus {
+  @extend %field-base;
+  flex-basis: 10%;
 }
 
 .itemDesc {

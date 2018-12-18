@@ -31,6 +31,6 @@ const IssueChart = React.memo<{ issues: Issue[] }>(({ issues }) => {
 
 export default () => (
   <IssuesQuery query={GET_ISSUES}>
-    {({ data: { issues = [] } }) => <IssueChart issues={issues} />}
+    {({ data: { issues } }) => <IssueChart issues={issues.filter((issue) => issue.status === 'OPEN')} />}
   </IssuesQuery>
 );

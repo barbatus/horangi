@@ -114,6 +114,7 @@
     "jsx-no-lambda": false,
     "no-implicit-dependencies": [true, "dev", ["app"]],
     "no-submodule-imports": false,
-    "max-classes-per-file": false
+    "max-classes-per-file": false,
+    "jsx-no-multiline-js": false
   }
 }

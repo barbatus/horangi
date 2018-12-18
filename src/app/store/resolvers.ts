@@ -6,6 +6,7 @@ const ISSUES = [...Array(20).keys()].map(() => {
   return {
     id: `${faker.random.number()}`,
     name: faker.lorem.words(2),
+    status: faker.random.arrayElement(['OPEN', 'CLOSE']),
     type: faker.random.arrayElement(['BUG', 'FEAT', 'STORY', 'EPIC']),
     description: faker.lorem.sentence(),
     __typename: 'Issue',
@@ -33,6 +34,7 @@ export const resolvers = {
         id: `${faker.random.number()}`,
         name,
         type,
+        status: 'OPEN',
         description,
         __typename: 'Issue',
       };
@@ -42,8 +44,8 @@ export const resolvers = {
       resolvers.updateCache(cache, data);
       return newIssue;
     },
-    update: (_, { id, name, type, description }, { cache }) => {
-      const data = { name, type, description };
+    update: (_, { id, name, type, status, description }, { cache }) => {
+      const data = { name, type, description, status };
       cache.writeData({ id, data });
       return null;
     },
