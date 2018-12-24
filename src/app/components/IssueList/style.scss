@@ -40,11 +40,11 @@
 .itemType {
   @extend %field-base;
   flex-basis: 10%;
+  padding-right: 15px;
 }
 
 .itemStatus {
-  @extend %field-base;
-  flex-basis: 10%;
+  @extend .itemType;
 }
 
 .itemDesc {

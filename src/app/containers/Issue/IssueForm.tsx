@@ -42,24 +42,21 @@ const IssueForm = React.memo<{ initialValues: Partial<Issue> }>(({ initialValues
 });
 
 function validate(issue: Partial<Issue>) {
+  let errors = {};
   if (!issue.name) {
-    throw new SubmissionError({
-      name: 'Required',
-    });
+    errors = { ...errors, name: 'Required' };
   }
 
   if (!issue.type) {
-    throw new SubmissionError({
-      type: 'Required',
-    });
+    errors = { ...errors, type: 'Required' };
   }
 
-  return issue;
+  return errors;
 }
 
 export default reduxForm({
   form: 'issueForm',
-  onSubmit: validate,
+  validate,
   forceUnregisterOnUnmount: true,
   enableReinitialize: true,
 })(IssueForm);

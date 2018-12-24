@@ -60,7 +60,7 @@ export default React.memo<IssueListProps>(
             {renderSort(orderBy, 'type')}
           </h4>
           <h4 className={style.itemStatus} onClick={() => onSortClick('status')}>
-            Type
+            Status
             {renderSort(orderBy, 'status')}
           </h4>
           <h4 className={style.itemDesc}>

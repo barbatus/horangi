@@ -21,7 +21,7 @@ interface IEditorProps {
 const Editor = React.memo<IEditorProps>(({ label, issue, onOk, onSubmit, onCancel }) => {
   return (
     <div className={style.sidePanel}>
-      <IssueForm initialValues={issue} onSubmitSuccess={onSubmit} />
+      <IssueForm initialValues={issue} onSubmit={onSubmit} />
       <div className={style.buttons}>
         <button className="primary" onClick={onOk}>
           {label}

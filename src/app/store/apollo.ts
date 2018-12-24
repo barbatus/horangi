@@ -10,7 +10,7 @@ const cache = new InMemoryCache({
   dataIdFromObject: (item) => item.id,
 });
 
-const CACHE_KEY = 'horangi';
+const CACHE_KEY = 'horangi555';
 
 const persistor = new CachePersistor({
   cache,
